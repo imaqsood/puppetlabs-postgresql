@@ -18,6 +18,8 @@ describe 'postgresql::server' do
     export_locales('en_NG.UTF8')
     idempotent_apply(pp, debug: true)
     puts '-------------------------------'
+    pp os
+    puts '-------------------------------'
     puts LitmusHelper.instance.run_shell('ss -lntp').stdout
     puts '-------------------------------'
     puts LitmusHelper.instance.run_shell('journalctl -u postgresql').stdout
