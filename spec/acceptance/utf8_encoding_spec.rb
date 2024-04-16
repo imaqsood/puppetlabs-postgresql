@@ -24,7 +24,7 @@ describe 'postgresql::server' do
     puts '-------------------------------'
     puts LitmusHelper.instance.run_shell('systemctl status postgresql*').stdout
     puts '-------------------------------'
-    expect(port(5432)).to be_listening
+    expect(port(5432)).to be_listening.on('127.0.0.1').with('tcp')
     expect(psql('--command="\l" postgres', 'postgres').stdout).to match(%r{List of databases})
     expect(psql('--command="SELECT pg_encoding_to_char(encoding) FROM pg_database WHERE datname=\'template1\'"').stdout).to match(%r{UTF8})
   end
