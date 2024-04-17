@@ -18,13 +18,15 @@ describe 'postgresql::server' do
     export_locales('en_NG.UTF8')
     idempotent_apply(pp, debug: true)
     puts '-------------------------------'
-    pp os
-    puts '-------------------------------'
     puts LitmusHelper.instance.run_shell('ss -lntp').stdout
     puts '-------------------------------'
     puts LitmusHelper.instance.run_shell('journalctl -u postgresql').stdout
     puts '-------------------------------'
     puts LitmusHelper.instance.run_shell('systemctl status postgresql*').stdout
+    puts '-------------------------------'
+    puts LitmusHelper.instance.run_shell("su postgres -c 'psql -c \\\\l'").stdout
+    puts '-------------------------------'
+    puts LitmusHelper.instance.run_shell('true &>/dev/null </dev/tcp/127.0.0.1/5432 && echo open || echo closed').stdout
     puts '-------------------------------'
     expect(port(5432)).to be_listening.on('127.0.0.1').with('tcp')
     expect(psql('--command="\l" postgres', 'postgres').stdout).to match(%r{List of databases})
